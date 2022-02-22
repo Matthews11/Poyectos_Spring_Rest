@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title th:text="${titulo}"></title>
+</head>
+<body>
+
+<h3 th:text="${titulo}"></h3>
+	<form th:accion="@{/form}" th:object="${usuario}" th:method="post">
+
+<div>
+			<label for="id">ID </label>
+			<div>
+				<input type="text"  id="id" th:field="*{id}"/>
+			</div>
+			<div th:if="${#fields.hasErrors('id')}" th:errors="*{id}"></div>
+		</div>
+		
+		<div>
+			<label for="us">Nombre </label>
+			<div>
+				<input type="text"  id="us" th:field="*{us}"/>
+			</div>
+			<div th:if="${#fields.hasErrors('us')}" th:errors="*{us}"></div>
+		</div>
+
+
+
+<div>
+			<label for="apellido">Apellido </label>
+			<div>
+				<input type="text"  id="apellido" th:field="*{apellido}"/>
+			</div>
+			<div th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></div>
+		</div>
+
+
+		<div>
+			<label for="nombre">Ingrese el nombre del usuario </label>
+			<div>
+				<input type="text"  id="nombre" th:field="*{nombre}"/>
+			</div>
+		<div th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+		</div>
+		
+		<div>
+			<label for="contrasena">Ingrese la contrasena </label>
+			<div>
+				<input type="password" th:field="*{contrasena}" id="contrasena" />
+			</div>
+		 <div th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}"></div>
+			
+		</div>
+		
+		<div>
+			<label for="email">Ingrese el correo  </label>
+			<div>
+				<input type="text"   id="email" th:field="*{email}"/>
+			</div>
+					 <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+			
+		</div>
+		 <div>
+			 <div>
+				<input type="submit"  value="Enviar"/>
+			</div>
+		</div>
+
+	</form>
+
+</body>
+</html>
