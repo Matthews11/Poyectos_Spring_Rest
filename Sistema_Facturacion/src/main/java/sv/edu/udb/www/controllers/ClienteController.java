@@ -69,8 +69,7 @@ public class ClienteController {
 		model.addAttribute("page", paginador);
 		return "Clientes/listar";
 	}
-
-	@Secured("ROLE_ADMIN")
+ 
 	@RequestMapping(value = "/ingresar")
 	public String crear(Model model, Locale locale) {
 		Cliente cliente = new Cliente();
@@ -80,7 +79,7 @@ public class ClienteController {
 		return "Clientes/ingresar";
 	}
 
-	@Secured("ROLE_ADMIN")
+	 
 	@RequestMapping(value = "/ingresar", method = RequestMethod.POST)
 	public String guardar(@Valid Cliente cliente, BindingResult resultado, Model model,
 			@RequestParam("file") MultipartFile foto, SessionStatus status, RedirectAttributes mensaje, Locale locale) {
@@ -142,7 +141,7 @@ public class ClienteController {
 		return "Clientes/ingresar";
 	}
 
-	@Secured("ROLE_ADMIN")
+	 
 	@RequestMapping(value = "/listar/{id}")
 	public String eliminar(@PathVariable(value = "id") Long id, Model model, RedirectAttributes mensaje, Locale locale) {
 
@@ -160,7 +159,7 @@ public class ClienteController {
 
 	}
 // carga la lista detalles
-	@Secured({"ROLE_USER","ROLE_ADMIN"}) 
+	  
 	@GetMapping(value = "/ver/{id}")
 	public String ver(@PathVariable(value = "id") Long id, Model model, RedirectAttributes mensaje, Locale locale) {
 		Cliente cliente = clienteService.clienteFactura(id);
@@ -176,7 +175,7 @@ public class ClienteController {
 	}
 
 // metodo que carga la img
-	@Secured({"ROLE_USER","ROLE_ADMIN"}) 
+	 
 	@GetMapping(value = "/perfil/{archivo:.+}")
 	public ResponseEntity<Resource> cargarImagen(@PathVariable String archivo) {
 		Resource recurso = null;
