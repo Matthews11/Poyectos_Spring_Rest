@@ -17,7 +17,7 @@ import com.mail.www.model.JwtAuthenticationToken;
 public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessingFilter {
 
 	public JwtAuthenticationTokenFilter() {
-		super("/DD/**");
+		super("/api2/**");
 	}
 //filtro de url y verificacion
 	@Override

@@ -23,6 +23,8 @@ import javax.validation.constraints.NotBlank;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * @author jared
  *
@@ -66,7 +68,7 @@ public class Chats implements Serializable{
 	
 	@Column(nullable = false)
 	private String categoria;
-	
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"}) 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="usuario")
 	private Usuarios usuario;

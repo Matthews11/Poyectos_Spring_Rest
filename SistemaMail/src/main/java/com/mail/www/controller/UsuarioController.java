@@ -93,7 +93,8 @@ public class UsuarioController {
 				mensajes.put("respuesta", "usuario verificado");
 				mensajes.put("Usuario", usuario);
 				verificacion = service.verificacionMail(usuarios);
-				token.setToken(jwtGenerator.generate(verificacion));
+				token.setToken(jwtGenerator.generate(verificacion)); 
+				
 				mensajes.put("Token", token.getToken());
 			} else {
 				mensajes.put("respuesta", "Datos Incorrectos ");

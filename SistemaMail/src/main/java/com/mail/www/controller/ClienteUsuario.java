@@ -29,17 +29,16 @@ public class ClienteUsuario {
 	@PostMapping("/ingresar")
 	public String crearClientes(@RequestBody Usuarios usuario) {
 
-		HttpHeaders headers = new HttpHeaders();
-		//System.out.println("estoy aca");
+		HttpHeaders headers = new HttpHeaders(); 
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));   
-		HttpEntity<Usuarios> entity = new HttpEntity<Usuarios>(usuario, headers); 
-		
+		HttpEntity<Usuarios> entity = new HttpEntity<Usuarios>(usuario, headers);  
 		ResponseEntity<String> responseEntity = restTemplate.exchange("http://localhost:7777/api/registrarse",
 				HttpMethod.POST, entity, String.class);
 		
 		
 		return responseEntity.getBody();
 	}
+	
 	
 	@GetMapping("/formulario")
 	public String crearFormulario(Model model) {
