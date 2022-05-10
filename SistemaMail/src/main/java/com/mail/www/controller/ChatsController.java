@@ -8,13 +8,15 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException; 
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;  
-import org.springframework.validation.BindingResult; 
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody; 
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +26,6 @@ import com.mail.www.entity.Usuarios;
 import com.mail.www.model.JwtToken;
 import com.mail.www.services.IChatsService;
 import com.mail.www.services.IUsuarioService;
- 
 
 @RestController
 @RequestMapping("/api2")
@@ -32,7 +33,7 @@ public class ChatsController {
 
 	@Autowired
 	private IChatsService service;
-	
+
 	@Autowired
 	private IUsuarioService serviceU;
 
@@ -43,9 +44,9 @@ public class ChatsController {
 		Usuarios usuario = new Usuarios();
 		usuario.setMail(chats.getMailE());
 		JwtToken token = new JwtToken();
-		
-		// token recibido por el cliente 
-				token.setToken(null);
+
+		// token recibido por el cliente
+		token.setToken(null);
 
 		if (result.hasErrors()) {
 			List<String> errors = result.getFieldErrors().stream()
@@ -55,8 +56,6 @@ public class ChatsController {
 			mensajes.put("error", errors);
 			return new ResponseEntity<Map<String, Object>>(mensajes, HttpStatus.BAD_REQUEST);
 		}
-
-	
 
 		try {
 			usuario = serviceU.verificacionMail(usuario);
@@ -69,8 +68,8 @@ public class ChatsController {
 				chats.setCategoria("Todos");
 				chats.setEstado("Enviado");
 				chats.setUsuario(usuario);
-				service.crear(chats); 
-				mensajes.put("proceso", "usuario se lleno"); 
+				service.crear(chats);
+				mensajes.put("proceso", "usuario se lleno");
 
 			}
 
@@ -79,7 +78,7 @@ public class ChatsController {
 			mensajes.put("error", ex.getMessage().concat(":").concat(ex.getMostSpecificCause().getMessage()));
 			return new ResponseEntity<Map<String, Object>>(mensajes, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+
 		verificar.prePersist();
 		mensajes.put("chats", chats);
 		return new ResponseEntity<Map<String, Object>>(mensajes, HttpStatus.CREATED);
@@ -89,86 +88,92 @@ public class ChatsController {
 	@GetMapping("/enviados")
 	public ResponseEntity<?> enviados() {
 		List<Chats> mail = service.listar();
-		Map<String, Object> mensaje = new HashMap<>(); 
+		Map<String, Object> mensaje = new HashMap<>();
 		JwtToken token = new JwtToken();
-		
-		// token recibido por el cliente 
+
+		// token recibido por el cliente
 		token.setToken(null);
-		
-		
-		
+
 		if (mail.size() > 0) {
 			return new ResponseEntity<List<Chats>>(mail, HttpStatus.OK);
 		} else {
-			mensaje.put("respuesta", "No has enviado ningun mail "); 
+			mensaje.put("respuesta", "No has enviado ningun mail ");
 			return new ResponseEntity<Map<String, Object>>(mensaje, HttpStatus.INTERNAL_SERVER_ERROR);
 
 		}
 	}
-	
+
 	@GetMapping("/recibidos")
-	public ResponseEntity<?> recibidos (){
-		
+	public ResponseEntity<?> recibidos() {
+
 		List<Chats> recibidos = service.listar();
 		Map<String, Object> mensaje = new HashMap<String, Object>();
 		JwtToken token = new JwtToken();
-		// token recibido por el cliente 
-				token.setToken(null);
-		
-		
-		if (recibidos.size()>0) {
-			return new ResponseEntity<List<Chats>>(recibidos,HttpStatus.OK);
-		}else {
+		// token recibido por el cliente
+		token.setToken(null);
+
+		if (recibidos.size() > 0) {
+			return new ResponseEntity<List<Chats>>(recibidos, HttpStatus.OK);
+		} else {
 			mensaje.put("respuesta", "No has recibido ningun mail");
-			return new ResponseEntity<Map<String, Object>>(mensaje,HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<Map<String, Object>>(mensaje, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-		
+
 	}
+
 	@GetMapping("/destacados")
-	public ResponseEntity<?> destacados(){
+	public ResponseEntity<?> destacados() {
 		List<Chats> destacado = service.listar();
 		Map<String, Object> mensaje = new HashMap<String, Object>();
 		JwtToken token = new JwtToken();
 		// token recibido
 		token.setToken(null);
-		
-		if (destacado.size()>0) {
+
+		if (destacado.size() > 0) {
 			return new ResponseEntity<List<Chats>>(destacado, HttpStatus.OK);
-		}else {
+		} else {
 			mensaje.put("respuesta", "No has destacado ningun mensaje ");
 			return new ResponseEntity<Map<String, Object>>(mensaje, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-	}  
-	
+
+	}
+
 	@GetMapping("/borrados")
-	public ResponseEntity<?> borrado(){
+	public ResponseEntity<?> borrado() {
 		List<Chats> borrados = service.listar();
 		Map<String, Object> mensaje = new HashMap<String, Object>();
 		JwtToken token = new JwtToken();
 		// token recibido
 		token.setToken(null);
-		
-		if (borrados.size()>0) {
+
+		if (borrados.size() > 0) {
 			return new ResponseEntity<List<Chats>>(borrados, HttpStatus.OK);
-		}else {
+		} else {
 			mensaje.put("respuesta", "No has borrado ningun mensaje ");
 			return new ResponseEntity<Map<String, Object>>(mensaje, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-	}  
-	
+
+	}
+
+	@PostMapping("/eliminar")
+	public ResponseEntity<?> eliminar(@PathVariable("id") long id) {
+		Map<String, Object> mensaje = new HashMap<String, Object>();
+		JwtToken token = new JwtToken();
+		// token recibido
+		token.setToken(null);
+
+
+		try {
+			service.eliminar(id);
+		} catch (DataAccessException ex) {
+			mensaje.put("respuesta", "No se realizo la consulta");
+			mensaje.put("error", ex.getMessage().concat(" : ").concat(ex.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(mensaje, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+
+		mensaje.put("respuesta", "Mensaje eliminado con exito");
+		return new ResponseEntity<Map<String, Object>>(mensaje, HttpStatus.OK);
+
+	}
+
 }
-
-
-
-
-
-
-
-
-
-
-
-

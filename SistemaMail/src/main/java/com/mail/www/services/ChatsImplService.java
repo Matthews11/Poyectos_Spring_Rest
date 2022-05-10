@@ -53,6 +53,13 @@ public class ChatsImplService implements IChatsService{
 		return null;
 	}
 
+
+	@Override
+	public void eliminar(long id) {
+		chatsRepo.deleteById(id);
+		
+	}
+
 	
 	
 

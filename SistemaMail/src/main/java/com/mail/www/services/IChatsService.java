@@ -15,4 +15,6 @@ public interface IChatsService {
 	public List<Chats>listar();
 	
 	public Chats obtenerCategoria(Chats chats);
+	
+	public void eliminar(long id);
 }
