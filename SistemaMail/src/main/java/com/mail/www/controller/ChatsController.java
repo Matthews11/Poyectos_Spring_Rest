@@ -155,7 +155,7 @@ public class ChatsController {
 
 	}
 
-	@PostMapping("/eliminar")
+	@PostMapping("/eliminar/{id}")
 	public ResponseEntity<?> eliminar(@PathVariable("id") long id) {
 		Map<String, Object> mensaje = new HashMap<String, Object>();
 		JwtToken token = new JwtToken();
